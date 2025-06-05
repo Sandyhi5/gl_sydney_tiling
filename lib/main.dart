@@ -2,7 +2,16 @@
 // All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:gl_sydney_tiling/NavButton.dart';
+import 'package:gl_sydney_tiling/AboutSection.dart';
+import 'package:gl_sydney_tiling/ContactSection.dart';
+import 'package:gl_sydney_tiling/GallerySection.dart';
+import 'package:gl_sydney_tiling/PhoneButton.dart';
+import 'package:gl_sydney_tiling/ServicesSection.dart';
+import 'package:gl_sydney_tiling/FooterSection.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
+import 'HeroSection.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,13 +26,13 @@ class MyApp extends StatelessWidget {
     return ResponsiveApp(
       builder: (context) {
       return MaterialApp(
-        title: 'GL Sydney Tiling Services',
+        title: 'GL Tiling Services Sydney',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
 
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: const HomePage(title: 'GL Sydney Tiling Services'),
+        home: const HomePage(title: 'GL Tiling Sydney'),
       );
     });
   }
@@ -39,6 +48,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final GlobalKey sectionKey = GlobalKey();
   bool _choice = false;
 
   void _selected() {
@@ -74,6 +85,43 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget desktopView(BuildContext context) {
-    return Container(color: Colors.green,);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("GL Tiling Sydney",
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: 1.25, wordSpacing: 1.8),), // You can replace with logo widget
+        actions: [
+          const PhoneButton(title: "0450 341 705"),
+          const SizedBox(width: 55,),
+          NavButton(sectionKey: sectionKey, title: "Home"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKey, title: "About"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKey, title: "Services"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKey, title: "Gallery"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKey, title: "Contact"),
+          const SizedBox(width: 10,),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            HeroSection(context),
+            const Divider(),
+            //AboutSection(context),
+            const Divider(),
+            //ServicesSection(context),
+            //const Divider(),
+            //GallerySection(context),
+            //const Divider(),
+            //ContactSection(context),
+            const Divider(),
+            FooterSection(context),
+          ],
+        ),
+      ),
+    );
+    //
   }
 }
