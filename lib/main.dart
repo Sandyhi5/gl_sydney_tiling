@@ -4,11 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:gl_sydney_tiling/NavButton.dart';
 import 'package:gl_sydney_tiling/AboutSection.dart';
-import 'package:gl_sydney_tiling/ContactSection.dart';
 import 'package:gl_sydney_tiling/GallerySection.dart';
 import 'package:gl_sydney_tiling/PhoneButton.dart';
 import 'package:gl_sydney_tiling/ServicesSection.dart';
-import 'package:gl_sydney_tiling/FooterSection.dart';
+import 'package:gl_sydney_tiling/ContactSection.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'HeroSection.dart';
@@ -49,7 +48,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  final GlobalKey sectionKey = GlobalKey();
+  final GlobalKey sectionKeyHm = GlobalKey();
+  final GlobalKey sectionKeyAb = GlobalKey();
+  final GlobalKey sectionKeySv = GlobalKey();
+  final GlobalKey sectionKeyGa = GlobalKey();
+  final GlobalKey sectionKeyCt = GlobalKey();
+
   bool _choice = false;
 
   void _selected() {
@@ -92,32 +96,30 @@ class _HomePageState extends State<HomePage> {
         actions: [
           const PhoneButton(title: "0450 341 705"),
           const SizedBox(width: 55,),
-          NavButton(sectionKey: sectionKey, title: "Home"),
+          NavButton(sectionKey: sectionKeyHm, title: "Home"),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKey, title: "About"),
+          NavButton(sectionKey: sectionKeyAb, title: "About"),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKey, title: "Services"),
+          NavButton(sectionKey: sectionKeySv, title: "Services"),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKey, title: "Gallery"),
+          NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKey, title: "Contact"),
+          NavButton(sectionKey: sectionKeyCt, title: "Contact"),
           const SizedBox(width: 10,),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeroSection(context),
+            HeroSection(sectionKeyHm, context),
             const Divider(),
-            //AboutSection(context),
+            AboutSection(sectionKeyAb, context),
             const Divider(),
-            //ServicesSection(context),
-            //const Divider(),
-            //GallerySection(context),
-            //const Divider(),
-            //ContactSection(context),
+            ServicesSection(sectionKeySv, context),
             const Divider(),
-            FooterSection(context),
+            GallerySection(sectionKeyGa, context),
+            const Divider(),
+            ContactSection(sectionKeyCt, context),
           ],
         ),
       ),
