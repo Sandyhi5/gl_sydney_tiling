@@ -36,8 +36,8 @@ class HeroSection extends StatelessWidget {
         alignment: Alignment.centerLeft,
       ),
         Positioned(
-          top: (screenHeight) * 0.35,
-          left: (screenWidth) * 0.1,
+          top: (screenHeight) * 0.3,
+          left: (screenWidth) * 0.075,
           child: Wrap(
             direction: Axis.vertical,
             children: [

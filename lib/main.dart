@@ -8,6 +8,8 @@ import 'package:gl_sydney_tiling/GallerySection.dart';
 import 'package:gl_sydney_tiling/PhoneButton.dart';
 import 'package:gl_sydney_tiling/ServicesSection.dart';
 import 'package:gl_sydney_tiling/ContactSection.dart';
+import 'package:gl_sydney_tiling/TestimonialsSection.dart';
+import 'package:gl_sydney_tiling/EnquirySection.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'HeroSection.dart';
@@ -52,8 +54,9 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey sectionKeyAb = GlobalKey();
   final GlobalKey sectionKeySv = GlobalKey();
   final GlobalKey sectionKeyGa = GlobalKey();
+  final GlobalKey sectionKeyTm = GlobalKey();
+  final GlobalKey sectionKeyEq = GlobalKey();
   final GlobalKey sectionKeyCt = GlobalKey();
-
   bool _choice = false;
 
   void _selected() {
@@ -89,6 +92,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget desktopView(BuildContext context) {
+
+    double kSeparator = 30;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("GL Tiling Sydney",
@@ -104,6 +110,10 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(width: 3,),
           NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
           const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
+          const SizedBox(width: 10,),
           NavButton(sectionKey: sectionKeyCt, title: "Contact"),
           const SizedBox(width: 10,),
         ],
@@ -112,13 +122,17 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             HeroSection(sectionKeyHm, context),
-            const Divider(),
+            SizedBox(height: kSeparator,),
             AboutSection(sectionKeyAb, context),
-            const Divider(),
+            SizedBox(height: kSeparator,),
             ServicesSection(sectionKeySv, context),
-            const Divider(),
+            SizedBox(height: kSeparator,),
             GallerySection(sectionKeyGa, context),
-            const Divider(),
+            SizedBox(height: kSeparator,),
+            TestimonialsSection(sectionKeyTm, context),
+            SizedBox(height: kSeparator,),
+            EnquirySection(sectionKeyEq, context),
+            SizedBox(height: kSeparator,),
             ContactSection(sectionKeyCt, context),
           ],
         ),
