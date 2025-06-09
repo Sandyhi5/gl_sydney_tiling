@@ -52,7 +52,7 @@ class GallerySection extends StatelessWidget {
 
         Container(
           key: sectionKey,
-          height: 700, width: screenWidth,
+          width: screenWidth,
           child: GridView.builder(
               itemCount: imagePaths.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -61,6 +61,8 @@ class GallerySection extends StatelessWidget {
                 mainAxisSpacing: 5,
                 childAspectRatio: 1,
               ),
+              shrinkWrap: true, // <-- MOBILE version
+              //physics: NeverScrollableScrollPhysics(), // MOBIL <-- to prevent nested scrolling
               itemBuilder: (context, index) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8),
