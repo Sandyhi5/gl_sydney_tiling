@@ -84,11 +84,101 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget mobileView(BuildContext context) {
-    return Container(color: Colors.purple,);
+    //return Container(color: Colors.purple,);
+    double kSeparator = 30;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("GL Tiling Sydney",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: 1.25, wordSpacing: 1.8),), // You can replace with logo widget
+        actions: [
+          const PhoneButton(title: "0450 341 705"),
+          const SizedBox(width: 55,),
+          NavButton(sectionKey: sectionKeyHm, title: "Home"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyAb, title: "About"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeySv, title: "Services"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
+          const SizedBox(width: 10,),
+          NavButton(sectionKey: sectionKeyCt, title: "Contact"),
+          const SizedBox(width: 10,),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            HeroSection(sectionKeyHm, context),
+            SizedBox(height: kSeparator,),
+            AboutSection(sectionKeyAb, context),
+            SizedBox(height: kSeparator,),
+            ServicesSection(sectionKeySv, context),
+            SizedBox(height: kSeparator,),
+            GallerySection(sectionKeyGa, context),
+            SizedBox(height: kSeparator,),
+            TestimonialsSection(sectionKeyTm, context),
+            SizedBox(height: kSeparator,),
+            EnquirySection(sectionKeyEq, context),
+            SizedBox(height: kSeparator,),
+            ContactSection(sectionKeyCt, context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget tabletView(BuildContext context) {
-    return Container(color: Colors.blue,);
+    //return Container(color: Colors.blue,);
+    double kSeparator = 30;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("GL Tiling Sydney",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: 1.25, wordSpacing: 1.8),), // You can replace with logo widget
+        actions: [
+          const PhoneButton(title: "0450 341 705"),
+          const SizedBox(width: 55,),
+          NavButton(sectionKey: sectionKeyHm, title: "Home"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyAb, title: "About"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeySv, title: "Services"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
+          const SizedBox(width: 3,),
+          NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
+          const SizedBox(width: 10,),
+          NavButton(sectionKey: sectionKeyCt, title: "Contact"),
+          const SizedBox(width: 10,),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            HeroSection(sectionKeyHm, context),
+            SizedBox(height: kSeparator,),
+            AboutSection(sectionKeyAb, context),
+            SizedBox(height: kSeparator,),
+            ServicesSection(sectionKeySv, context),
+            SizedBox(height: kSeparator,),
+            GallerySection(sectionKeyGa, context),
+            SizedBox(height: kSeparator,),
+            TestimonialsSection(sectionKeyTm, context),
+            SizedBox(height: kSeparator,),
+            EnquirySection(sectionKeyEq, context),
+            SizedBox(height: kSeparator,),
+            ContactSection(sectionKeyCt, context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget desktopView(BuildContext context) {
