@@ -50,6 +50,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  // This is for parallax control
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0.0;
+
+  // Below is for jumping to sections upon request
   final GlobalKey sectionKeyHm = GlobalKey();
   final GlobalKey sectionKeyAb = GlobalKey();
   final GlobalKey sectionKeySv = GlobalKey();
@@ -57,45 +62,43 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey sectionKeyTm = GlobalKey();
   final GlobalKey sectionKeyEq = GlobalKey();
   final GlobalKey sectionKeyCt = GlobalKey();
-  bool _choice = false;
 
-  void _selected() {
-    setState(() {
-      _choice = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-
     return ResponsiveBuilder(
-      builder: (context, sizingInformation) {
-
-        if(sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
-          debugPrint('DESKTOP view');
-          return desktopView(context);
-        }
-        if(sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
-          debugPrint('TABLET view');
-          return tabletView(context);
-        }
-        debugPrint('MOBILE view');
-        return mobileView(context);
-      });
+        builder: (context, sizingInformation) {
+          if (sizingInformation.deviceScreenType == DeviceScreenType.desktop) {
+            debugPrint('DESKTOP view');
+            return desktopView(context);
+          }
+          if (sizingInformation.deviceScreenType == DeviceScreenType.tablet) {
+            debugPrint('TABLET view');
+            return tabletView(context);
+          }
+          debugPrint('MOBILE view');
+          return mobileView(context);
+        });
   }
 
 
   Widget mobileView(BuildContext context) {
-    //return Container(color: Colors.purple,);
     final double kSeparator = 20;
     final bool isMobile = true;
 
+    double heroHeight = 700.0;
+    double parallax = _scrollOffset * 0.6; // slower scroll rate
+
     return Scaffold(
+
       appBar: AppBar(
         title: Transform.translate(
           offset: Offset(-10, 0),
           child: const Text("GL Tiling Sydney",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: 1.10, wordSpacing: 1.4),),
+            style: TextStyle(fontSize: 18,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.10,
+                wordSpacing: 1.4),),
         ), // You can replace with logo widget
 
         actions: [
@@ -107,19 +110,25 @@ class _HomePageState extends State<HomePage> {
       ),
 
       drawer: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.5,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.5,
         child: Drawer(
           child: Align(
             alignment: Alignment.topLeft,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque, // Ensures all taps are caught
-              onTap: () {Navigator.of(context).pop();},
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
                   DrawerHeader(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Colors.pink.shade800, Colors.pink.shade400]),
+                      gradient: LinearGradient(
+                          colors: [Colors.pink.shade800, Colors.pink.shade400]),
                     ),
                     child: SizedBox(
                       height: 50,
@@ -127,27 +136,41 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text('Categories',
                           style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white),
+                              fontSize: 15,
+                              color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: 55,),
-                  NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyHm,
+                    title: "Home",
+                    isMobile: isMobile,),
                   const SizedBox(width: 3,),
-                  NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyAb,
+                    title: "About",
+                    isMobile: isMobile,),
                   const SizedBox(width: 3,),
-                  NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeySv,
+                    title: "Services",
+                    isMobile: isMobile,),
                   const SizedBox(width: 3,),
-                  NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyGa,
+                    title: "Gallery",
+                    isMobile: isMobile,),
                   const SizedBox(width: 3,),
-                  NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyTm,
+                    title: "Testimonials",
+                    isMobile: isMobile,),
                   const SizedBox(width: 3,),
-                  NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyEq,
+                    title: "Enquire",
+                    isMobile: isMobile,),
                   const SizedBox(width: 10,),
-                  NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
+                  NavButton(sectionKey: sectionKeyCt,
+                    title: "Contact",
+                    isMobile: isMobile,),
                   const SizedBox(width: 10,),
                 ],
               ),
@@ -157,9 +180,24 @@ class _HomePageState extends State<HomePage> {
       ),
 
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
-            HeroSection(sectionKeyHm, context, isMobile),
+            Stack(
+            children: [
+              Positioned.fill(
+                child: Transform.translate(
+                  offset: Offset(0, parallax),
+                  child: Image.asset(
+                    'images/image6.jpg',
+                    height: heroHeight,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              HeroSection(sectionKeyHm, context, isMobile)
+            ]),
             SizedBox(height: kSeparator,),
             AboutSection(sectionKeyAb, context, isMobile),
             SizedBox(height: kSeparator,),
@@ -178,6 +216,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
   Widget tabletView(BuildContext context) {
     //return Container(color: Colors.blue,);
     double kSeparator = 30;
@@ -186,23 +225,34 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("GL Tiling Sydney",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: 1.25, wordSpacing: 1.8),), // You can replace with logo widget
+          style: TextStyle(fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.25,
+              wordSpacing: 1.8),), // You can replace with logo widget
         actions: [
           const PhoneButton(title: "0450 341 705"),
           const SizedBox(width: 55,),
-          NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
+          NavButton(sectionKey: sectionKeyTm,
+            title: "Testimonials",
+            isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
           const SizedBox(width: 10,),
-          NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
           const SizedBox(width: 10,),
         ],
       ),
@@ -228,31 +278,42 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget desktopView(BuildContext context) {
 
+  Widget desktopView(BuildContext context) {
     double kSeparator = 30;
     final bool isMobile = false;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("GL Tiling Sydney",
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: 1.25, wordSpacing: 1.8),), // You can replace with logo widget
+          style: TextStyle(fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.25,
+              wordSpacing: 1.8),), // You can replace with logo widget
         actions: [
           const PhoneButton(title: "0450 341 705"),
           const SizedBox(width: 55,),
-          NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
+          NavButton(sectionKey: sectionKeyTm,
+            title: "Testimonials",
+            isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
           const SizedBox(width: 10,),
-          NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
+          NavButton(
+            sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
           const SizedBox(width: 10,),
         ],
       ),
@@ -277,5 +338,23 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     //
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _scrollOffset = _scrollController.offset;
+      });
+    });
+
+
+    @override
+    void dispose() {
+      _scrollController.dispose();
+      super.dispose();
+    }
   }
 }

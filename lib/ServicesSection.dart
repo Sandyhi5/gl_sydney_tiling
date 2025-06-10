@@ -120,7 +120,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                           child: Container(
                             width: screenWidth / 3,
                             alignment: Alignment.centerLeft,
-                            color: index == currentIndex ? Colors.grey[500] : null,
+                            color: index == currentIndex ? Colors.grey[300] : null,
 
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
@@ -208,7 +208,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                               child: Container(
                                 //height: itemHeight,
                                 alignment: Alignment.centerLeft,
-                                color: index == currentIndex ? Colors.grey[500] : null,
+                                color: index == currentIndex ? Colors.grey[300] : null,
 
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
