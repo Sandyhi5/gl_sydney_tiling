@@ -9,9 +9,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 class NavButton extends StatelessWidget {
 
   final GlobalKey sectionKey;
-
   final String title;
-  const NavButton({required this.sectionKey, required this.title, super.key});
+  final bool isMobile;
+  const NavButton({required this.sectionKey, required this.title, required this.isMobile, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,12 @@ class NavButton extends StatelessWidget {
             child: Text(title,
               style: TextStyle(
                 color: Colors.pink[800],
-                fontSize: 14.0),
+                fontSize: isMobile ? 15.0 : 14.0),
             ),
             onPressed: () {
+              if(isMobile) {
+                Navigator.of(context).pop();
+              };
               scrollToSection(sectionKey);
             }
           ),

@@ -87,12 +87,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget mobileView(BuildContext context) {
     //return Container(color: Colors.purple,);
-    double kSeparator = 20;
+    final double kSeparator = 20;
+    final bool isMobile = true;
 
     return Scaffold(
       appBar: AppBar(
         title: Transform.translate(
-          offset: Offset(-8, 0),
+          offset: Offset(-10, 0),
           child: const Text("GL Tiling Sydney",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: 1.10, wordSpacing: 1.4),),
         ), // You can replace with logo widget
@@ -110,42 +111,46 @@ class _HomePageState extends State<HomePage> {
         child: Drawer(
           child: Align(
             alignment: Alignment.topLeft,
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [Colors.pink.shade800, Colors.pink.shade400]),
-                  ),
-                  child: SizedBox(
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Categories',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white),
-                        textAlign: TextAlign.center,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque, // Ensures all taps are caught
+              onTap: () {Navigator.of(context).pop();},
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [Colors.pink.shade800, Colors.pink.shade400]),
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Categories',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 55,),
-                NavButton(sectionKey: sectionKeyHm, title: "Home"),
-                const SizedBox(width: 3,),
-                NavButton(sectionKey: sectionKeyAb, title: "About"),
-                const SizedBox(width: 3,),
-                NavButton(sectionKey: sectionKeySv, title: "Services"),
-                const SizedBox(width: 3,),
-                NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
-                const SizedBox(width: 3,),
-                NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
-                const SizedBox(width: 3,),
-                NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
-                const SizedBox(width: 10,),
-                NavButton(sectionKey: sectionKeyCt, title: "Contact"),
-                const SizedBox(width: 10,),
-              ],
+                  const SizedBox(width: 55,),
+                  NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
+                  const SizedBox(width: 3,),
+                  NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
+                  const SizedBox(width: 3,),
+                  NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
+                  const SizedBox(width: 3,),
+                  NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
+                  const SizedBox(width: 3,),
+                  NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
+                  const SizedBox(width: 3,),
+                  NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
+                  const SizedBox(width: 10,),
+                  NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
+                  const SizedBox(width: 10,),
+                ],
+              ),
             ),
           ),
         ),
@@ -154,19 +159,19 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeroSection(sectionKeyHm, context),
+            HeroSection(sectionKeyHm, context, isMobile),
             SizedBox(height: kSeparator,),
-            AboutSection(sectionKeyAb, context),
+            AboutSection(sectionKeyAb, context, isMobile),
             SizedBox(height: kSeparator,),
-            ServicesSection(sectionKeySv, context),
+            ServicesSection(sectionKeySv, context, isMobile),
             SizedBox(height: kSeparator,),
-            GallerySection(sectionKeyGa, context),
+            GallerySection(sectionKeyGa, context, isMobile),
             SizedBox(height: kSeparator,),
-            TestimonialsSection(sectionKeyTm, context),
+            TestimonialsSection(sectionKeyTm, context, isMobile),
             SizedBox(height: kSeparator,),
             EnquirySection(sectionKeyEq, context),
             SizedBox(height: kSeparator,),
-            ContactSection(sectionKeyCt, context),
+            ContactSection(sectionKeyCt, context, isMobile),
           ],
         ),
       ),
@@ -176,6 +181,7 @@ class _HomePageState extends State<HomePage> {
   Widget tabletView(BuildContext context) {
     //return Container(color: Colors.blue,);
     double kSeparator = 30;
+    final bool isMobile = false;
 
     return Scaffold(
       appBar: AppBar(
@@ -184,38 +190,38 @@ class _HomePageState extends State<HomePage> {
         actions: [
           const PhoneButton(title: "0450 341 705"),
           const SizedBox(width: 55,),
-          NavButton(sectionKey: sectionKeyHm, title: "Home"),
+          NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyAb, title: "About"),
+          NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeySv, title: "Services"),
+          NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
+          NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
+          NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
+          NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
           const SizedBox(width: 10,),
-          NavButton(sectionKey: sectionKeyCt, title: "Contact"),
+          NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
           const SizedBox(width: 10,),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeroSection(sectionKeyHm, context),
+            HeroSection(sectionKeyHm, context, isMobile),
             SizedBox(height: kSeparator,),
-            AboutSection(sectionKeyAb, context),
+            AboutSection(sectionKeyAb, context, isMobile),
             SizedBox(height: kSeparator,),
-            ServicesSection(sectionKeySv, context),
+            ServicesSection(sectionKeySv, context, isMobile),
             SizedBox(height: kSeparator,),
-            GallerySection(sectionKeyGa, context),
+            GallerySection(sectionKeyGa, context, isMobile),
             SizedBox(height: kSeparator,),
-            TestimonialsSection(sectionKeyTm, context),
+            TestimonialsSection(sectionKeyTm, context, isMobile),
             SizedBox(height: kSeparator,),
             EnquirySection(sectionKeyEq, context),
             SizedBox(height: kSeparator,),
-            ContactSection(sectionKeyCt, context),
+            ContactSection(sectionKeyCt, context, isMobile),
           ],
         ),
       ),
@@ -225,6 +231,7 @@ class _HomePageState extends State<HomePage> {
   Widget desktopView(BuildContext context) {
 
     double kSeparator = 30;
+    final bool isMobile = false;
 
     return Scaffold(
       appBar: AppBar(
@@ -233,38 +240,38 @@ class _HomePageState extends State<HomePage> {
         actions: [
           const PhoneButton(title: "0450 341 705"),
           const SizedBox(width: 55,),
-          NavButton(sectionKey: sectionKeyHm, title: "Home"),
+          NavButton(sectionKey: sectionKeyHm, title: "Home", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyAb, title: "About"),
+          NavButton(sectionKey: sectionKeyAb, title: "About", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeySv, title: "Services"),
+          NavButton(sectionKey: sectionKeySv, title: "Services", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyGa, title: "Gallery"),
+          NavButton(sectionKey: sectionKeyGa, title: "Gallery", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyTm, title: "Testimonials"),
+          NavButton(sectionKey: sectionKeyTm, title: "Testimonials", isMobile: isMobile,),
           const SizedBox(width: 3,),
-          NavButton(sectionKey: sectionKeyEq, title: "Enquire"),
+          NavButton(sectionKey: sectionKeyEq, title: "Enquire", isMobile: isMobile,),
           const SizedBox(width: 10,),
-          NavButton(sectionKey: sectionKeyCt, title: "Contact"),
+          NavButton(sectionKey: sectionKeyCt, title: "Contact", isMobile: isMobile,),
           const SizedBox(width: 10,),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeroSection(sectionKeyHm, context),
+            HeroSection(sectionKeyHm, context, isMobile),
             SizedBox(height: kSeparator,),
-            AboutSection(sectionKeyAb, context),
+            AboutSection(sectionKeyAb, context, isMobile),
             SizedBox(height: kSeparator,),
-            ServicesSection(sectionKeySv, context),
+            ServicesSection(sectionKeySv, context, isMobile),
             SizedBox(height: kSeparator,),
-            GallerySection(sectionKeyGa, context),
+            GallerySection(sectionKeyGa, context, isMobile),
             SizedBox(height: kSeparator,),
-            TestimonialsSection(sectionKeyTm, context),
+            TestimonialsSection(sectionKeyTm, context, isMobile),
             SizedBox(height: kSeparator,),
             EnquirySection(sectionKeyEq, context),
             SizedBox(height: kSeparator,),
-            ContactSection(sectionKeyCt, context),
+            ContactSection(sectionKeyCt, context, isMobile),
           ],
         ),
       ),

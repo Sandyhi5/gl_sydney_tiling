@@ -9,8 +9,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 class GallerySection extends StatelessWidget {
   final GlobalKey sectionKey;
   final BuildContext context;
+  final bool isMobile;
 
-  GallerySection(this.sectionKey, this.context, {super.key});
+  GallerySection(this.sectionKey, this.context, this.isMobile, {super.key});
 
 
   final List<String> imagePaths = List.generate(9,
@@ -27,9 +28,9 @@ class GallerySection extends StatelessWidget {
     return Column(
       children: [
 
-        // Our Services
+        // Gallery
         SizedBox(
-          width: screenWidth / 2,
+          width: screenWidth,
           child: Container(
             height: 50,
             width: double.infinity, //screenWidth - 10,

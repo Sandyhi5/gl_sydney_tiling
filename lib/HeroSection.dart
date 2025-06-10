@@ -9,8 +9,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 class HeroSection extends StatelessWidget {
   final GlobalKey sectionKey;
   final BuildContext context;
+  final bool isMobile;
 
-  HeroSection(this.sectionKey, this.context, {super.key});
+  HeroSection(this.sectionKey, this.context, this.isMobile, {super.key});
 
 
   @override
@@ -40,8 +41,9 @@ class HeroSection extends StatelessWidget {
           left: (screenWidth) * 0.075,
           child: Wrap(
             direction: Axis.vertical,
+            crossAxisAlignment: WrapCrossAlignment.start,
             children: [
-              Text('Welcome to GL Tiling Sydney',
+              Text(isMobile ? 'Welcome to\nGL Tiling Sydney' : 'Welcome to GL Tiling Sydney',
                 style: TextStyle(color: Colors.pink[800], fontSize: 36, fontWeight: FontWeight.bold,
                 ),
               ),
@@ -49,34 +51,35 @@ class HeroSection extends StatelessWidget {
               Text('Tilers you can trust', style: TextStyle(fontSize: 28, color: Colors.white70, fontWeight: FontWeight.bold)),
               SizedBox(height: 8,),
               SizedBox(width: screenHeight * 0.6,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('GL Tiling Sydney are specialists in wall and floor tiling. Whether it is for your bathroom, shower, floors, patio, stairs or any part of your home, GL Tiling can help.',
-                    style: TextStyle(fontSize: 16, overflow: TextOverflow.visible, color: Colors.white),),
-                ),
+                child: Text('GL Tiling Sydney are specialists in wall and floor tiling. Whether it is for your bathroom, shower, floors, patio, stairs or any part of your home, GL Tiling can help.',
+                  style: TextStyle(fontSize: 16, overflow: TextOverflow.visible, color: Colors.white),),
               ),
               //SizedBox(height: 12,),
-              SizedBox(
-                width: screenHeight * 0.6,
-                child: Row(
-                  children: [
-                    TextButton(
-                      child: Text('Call now',
-                        style: TextStyle(
-                            color: Colors.white, //Colors.pink[800],
-                            fontSize: 20.0),
+              Transform.translate(
+                offset: Offset(-10, 0),
+                child: SizedBox(
+                  //width: screenWidth * 0.6,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        child: Text('Call now',
+                          style: TextStyle(
+                              color: Colors.white, //Colors.pink[800],
+                              fontSize: 20.0),
+                        ),
+                        onPressed: () {
+                          //Navigator.pop(context);
+                        }
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }
-                    ),
-                    //IconButton(onPressed: null, icon: Icon(Icons.arrow_right_alt_rounded)),
-                    IconButton(
-                      icon: Icon(Icons.phone_android_rounded,
-                        color: Colors.white,),
-                      onPressed: null,
-                    ),
-                ]),
+                      //IconButton(onPressed: null, icon: Icon(Icons.arrow_right_alt_rounded)),
+                      IconButton(
+                        icon: Icon(Icons.phone_android_rounded,
+                          color: Colors.white,),
+                        onPressed: null,
+                      ),
+                  ]),
+                ),
               ),
             ],
           ),

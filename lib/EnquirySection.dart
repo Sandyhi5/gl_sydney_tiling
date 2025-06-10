@@ -126,7 +126,7 @@ class EnquirySection extends StatelessWidget {
                     SizedBox(height: 16),
                     ElevatedButton(
                       child: Text('Send Enquiry',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(color: Colors.pink)),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           sendEmail();

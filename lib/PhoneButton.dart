@@ -16,14 +16,16 @@ class PhoneButton extends StatelessWidget {
       child: ColoredBox(
         color: Colors.grey.shade900,
         child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             IconButton(
               icon: Icon(Icons.phone_android_rounded,
               color: Colors.white70,),
               onPressed: null,
             ),
-            SizedBox(width: 3,),
+            SizedBox(width: 1,),
             Container(
+              alignment: Alignment(0, 5),
               child: TextButton(
                   child: Text(title,
                     style: TextStyle(
@@ -31,7 +33,7 @@ class PhoneButton extends StatelessWidget {
                         fontSize: 18.0),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    //Navigator.pop(context);
                   }
               ),
             ),

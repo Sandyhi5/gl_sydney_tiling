@@ -9,8 +9,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 class ServicesSection extends StatefulWidget {
   final GlobalKey sectionKey;
   final BuildContext context;
+  final bool isMobile;
 
-  const ServicesSection(this.sectionKey, this.context, {super.key});
+  const ServicesSection(this.sectionKey, this.context, this.isMobile, {super.key});
 
   @override
   State<ServicesSection> createState() => _ServicesSectionState();
@@ -73,7 +74,94 @@ class _ServicesSectionState extends State<ServicesSection> {
 
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Wrap(
+    return widget.isMobile
+      ? Column(
+      key: widget.sectionKey,
+      children: [
+        SizedBox(
+          width: screenWidth,
+          child: Container(
+            height: 50,
+            width: double.infinity, //screenWidth - 10,
+            color: Colors.pink.shade700,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Our Services',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+
+        SizedBox(width: 10,),
+
+        SizedBox(
+          height: itemHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: labels.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            currentIndex = index;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: screenWidth / 3,
+                            alignment: Alignment.centerLeft,
+                            color: index == currentIndex ? Colors.grey[500] : null,
+
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(labels[index],
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.pink.shade500,
+                                  fontSize: index == currentIndex ? 16 : 14,
+                                  fontWeight: index == currentIndex ? FontWeight.bold : FontWeight.normal,
+                                ),),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                ),
+              ),
+
+              SizedBox(width: screenWidth * 2/3 - 20,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    //width: screenWidth / 2,
+                    height: itemHeight,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(images[currentIndex]),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ],
+    )
+      : Wrap(
         key: widget.sectionKey,
         direction: Axis.vertical,
         children: [
@@ -108,32 +196,32 @@ class _ServicesSectionState extends State<ServicesSection> {
 
                     Expanded(
                       child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: labels.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                currentIndex = index;
-                              });
-                            },
-                            child: Container(
-                              //height: itemHeight,
-                              alignment: Alignment.centerLeft,
-                              color: index == currentIndex ? Colors.grey[500] : null,
+                          controller: _scrollController,
+                          itemCount: labels.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentIndex = index;
+                                });
+                              },
+                              child: Container(
+                                //height: itemHeight,
+                                alignment: Alignment.centerLeft,
+                                color: index == currentIndex ? Colors.grey[500] : null,
 
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(labels[index],
-                                  style: TextStyle(
-                                  color: Colors.pink.shade500,
-                                  fontSize: index == currentIndex ? 22 : 18,
-                                  fontWeight: index == currentIndex ? FontWeight.bold : FontWeight.normal,
-                                ),),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(labels[index],
+                                    style: TextStyle(
+                                      color: Colors.pink.shade500,
+                                      fontSize: index == currentIndex ? 22 : 18,
+                                      fontWeight: index == currentIndex ? FontWeight.bold : FontWeight.normal,
+                                    ),),
+                                ),
                               ),
-                            ),
-                          );
-                        }
+                            );
+                          }
                       ),
                     ),
                   ],
