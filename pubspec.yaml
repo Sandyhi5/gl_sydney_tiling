@@ -39,6 +39,7 @@ dependencies:
   ionicons: ^0.2.2
   http: ^1.4.0
   carousel_slider: ^5.1.1
+  emailjs: ^4.0.0
 
 dev_dependencies:
   flutter_test:
