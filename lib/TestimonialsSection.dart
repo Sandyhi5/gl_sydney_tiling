@@ -14,9 +14,10 @@ class TestimonialsSection extends StatelessWidget {
   final bool isMobile;
 
   final Map<String, String> reviews = {
-    'Sandy': 'I used the services of GL Tiling and the results were simply WOW !',
-    'Sumi': 'Excellent service. Very pleased with GL\'s approachable Tilers, particularly Joseph',
-    'Sanjna' : 'Will refer GL Tiling for their excellent work'
+    'Sandy, Kellyville': 'Job is now completed successfully. Very good Tiler came over for the job. After proper measurements we found the total area was a lot more than originally thought, it ended up close to 90 sq m. Tiler completed the job and the result is excellent. Happy to refer this business',
+    'Sumi, Kensington': 'Excellent service. Very pleased with GL\'s approachable Tilers, particularly Joseph',
+    'Sanjna, Chatswood West' : 'Will refer GL Tiling for their excellent work',
+    'Kyri, Enfield': 'What in incredibly wonderful experience. From the first communication to finishing the job, Joseph was outstanding. We had 150m2 of floor tiling that needed to be done ASAP and Joseph went above and beyond. His work is simply exceptional. He takes pride in his work, is diligent and a true craftsman. There is not one thing I can complain about, not one. Punctual, honours his commitments and every day he left the house clean and tidy. I have absolutely no hesitation in recommending Joseph.'
   };
 
   TestimonialsSection(this.sectionKey, this.context, this.isMobile, {super.key});
@@ -25,7 +26,8 @@ class TestimonialsSection extends StatelessWidget {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
-    //double screenHeight = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    final ScrollController shortController = ScrollController();
 
     return isMobile
     ? Container(
@@ -72,21 +74,31 @@ class TestimonialsSection extends StatelessWidget {
 
                                 child: Card(
                                   color: Colors.teal.shade300,
-                                  elevation: 2,
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(review.value, style: TextStyle(fontSize: 15),),
-                                        const SizedBox(height: 10),
-                                        Text('- ${review.key}', style: TextStyle(fontSize: 16),),
-                                      ],
+                                    child: Scrollbar(
+                                      thumbVisibility: true, // always show scrollbar thumb
+                                      trackVisibility: true, // optionally show track
+                                      interactive: true,
+                                      controller: shortController,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(review.value, style: TextStyle(fontSize: 15),),
+                                            const SizedBox(height: 10),
+                                            Text('- ${review.key}', style: TextStyle(fontSize: 16),),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),);
                             }).toList(),
                             options: CarouselOptions(
-                              height: 175.0,
+                              height: 250.0,
                               viewportFraction: 0.5,
                               enlargeCenterPage: false,
                               autoPlay: true,
@@ -147,25 +159,40 @@ class TestimonialsSection extends StatelessWidget {
                             items: reviews.entries.map((review) {
                               return Container(
                                 //width: screenWidth / 2 - 30,
-                                height: 200,
+                                height: 220,
 
                                 child: Card(
                                   color: Colors.teal.shade300,
-                                  elevation: 2,
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(review.value, style: TextStyle(fontSize: 15),),
-                                        const SizedBox(height: 10),
-                                        Text('- ${review.key}', style: TextStyle(fontSize: 16),),
-                                      ],
+                                    child: Scrollbar(
+                                      thumbVisibility: true, // always show scrollbar thumb
+                                      trackVisibility: true, // optionally show track
+                                      interactive: true,
+                                      controller: shortController,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(review.value, style: TextStyle(fontSize: 15),),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text('- ${review.key}', style: TextStyle(fontSize: 16),),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),);
                             }).toList(),
                             options: CarouselOptions(
-                              height: 200.0,
+                              height: 240.0,
                               viewportFraction: 0.3,
                               enlargeCenterPage: false,
                               autoPlay: true,

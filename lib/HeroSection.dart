@@ -52,7 +52,8 @@ class HeroSection extends StatelessWidget {
               SizedBox(height: 8,),
               SizedBox(width: screenHeight * 0.6,
                 child: Text('GL Tiling Sydney are specialists in wall and floor tiling. Whether it is for your bathroom, shower, floors, patio, stairs or any part of your home, GL Tiling can help.',
-                  style: TextStyle(fontSize: 16, overflow: TextOverflow.visible, color: Colors.white),),
+                  style: TextStyle(fontSize: 16, overflow: TextOverflow.visible, color: Colors.teal.shade100, fontWeight: FontWeight.bold
+                  ),),
               ),
               //SizedBox(height: 12,),
               Transform.translate(
