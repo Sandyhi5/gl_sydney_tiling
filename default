@@ -1,0 +1,459 @@
+# -----------------------------------------------------
+# This is the updated nginx config to support 3 SERVERS
+# -- Top portion is left as is for VAANI_SERVER
+# -- Middle portion is added for TEMPLETIME_SERVER
+# -- Bottom portion is added for GLTILINGSYDNEY
+#
+# Instructions from ChatGPT
+#
+# -----------------------------------------------------
+
+##
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+
+## -------------------------------------------------------
+##
+## Here we have nginx config for VAANI_SERVER
+##
+## -------------------------------------------------------
+
+# Case 1, 4  - HTTP redirect for www.vaanihub.com, vaanihub.com to HTTPS
+server {
+	listen 80;
+	server_name vaanihub.com www.vaanihub.com;
+
+	# Added this for Lets Encrypt certificate renewal
+	# Refer discussion in ChatGPT for reasoning
+	location /.well-known/acme-challenge/ {
+		root /var/www/html;
+		allow all;
+	}
+
+	location / {
+		return 301 https://vaanihub.com;
+	}
+}
+
+
+
+
+# Case 2 - HTTPS redirect for www.vaanihub.com --> vaanihub.com secure
+server {
+	listen 443 ssl; 
+	# default_server;
+	server_name www.vaanihub.com;
+
+	ssl_certificate /etc/letsencrypt/live/vaanihub.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/vaanihub.com/privkey.pem;
+
+	# Redirect www to non-www on HTTPS ie over to Case# 3
+	return 301 https://vaanihub.com;
+}
+
+
+
+# Case 3 - HTTPS redirect for vaanihub.com
+server {
+	listen 443 ssl;
+	server_name vaanihub.com;
+
+	ssl_certificate /etc/letsencrypt/live/vaanihub.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/vaanihub.com/privkey.pem;
+
+	# Ensure Nginx supports ECDSA
+	ssl_ecdh_curve prime256v1;
+
+	# Prefer stronger ciphers
+	ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:!aNULL:!eNULL:!LOW:!MEDIUM:!EXPORT:!DES:!3DES:!RC4:!MD5:!SHA1';
+
+
+	# Add CORS headers
+	add_header Access-Control-Allow-Origin "*";
+	add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+	add_header Access-Control-Allow-Headers "X-Requested-With, Content-Type, Authorization";
+
+	# Root dir - indicates root directory for entire server
+	root /root/vaani_server/vaani_server_server/web;
+	index index.html;
+
+	
+	# Main application traffic
+	location / {
+		#proxy_set_header Host vaanihub.com;    <-- 23-DEC-24: CHANGED to $host from vaanihub.com
+		#proxy_pass http://45.151.153.174:8082; <-- 23-DEC-24: CHANGED to localhost from full ip-address:8082
+		#proxy_set_header X-Real-IP 45.151.153.174; 23-DEC-24: CHANGED to $remote_addr from 45.151.153.174
+		#proxy_set_header X-Forwarded-For 8082; <-- 23-DEC-24: CHANGED to ip-address from port 8082, then changed to $var
+
+		proxy_pass http://localhost:8182;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+
+		# Ensure browser does not cache .js files and fetches latest
+		add_header Cache-Control "no-cache, no-store, must-revalidate";
+		add_header Pragma "no-cache";
+		add_header Expires 0;
+
+		#try_files $uri /index.html;
+	}
+
+
+	# For static files
+	location /static/ {
+		alias /root/vaani_server/vaani_server_server/web/static;
+		add_header Access-Control-Allow-Origin "*";
+		add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+		add_header Access-Control-Allow-Headers "X-Requested-With, Content-Type, Authorization";
+	}
+
+	# !!!
+	# NOTE: Below causes errors like missing AssetManifest.json and fonts don't load
+	# !!!
+	# Serve static files directly
+	#location /assets {
+	#	root /root/vaani_server/vaani_server_server;
+	#}
+
+
+	# Forward API calls for API traffic
+	location /serverpod_auth.status {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+		#proxy_pass http://45.151.153.174:8080;
+	}
+
+	location /vnArticle {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+		#proxy_pass http://45.151.153.174:8080;
+	}
+
+	location /serverpod_auth.email {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /vnAuth {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /vnAuthor {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnCategory {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnClaps {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnMember {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnMemberFollowers {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnMemberFollowing {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnNotifications {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	location /vnResponse {
+		proxy_pass http://localhost:8180;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+	
+}
+
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+##
+## Here we have the config for TEMPLETIME_SERVER
+##
+## -------------------------------------------------------
+
+# Case 1, 4  - HTTP redirect for www.templetime.com.au, templetime.com.au to HTTPS
+server {
+	listen 80;
+	server_name templetime.com.au www.templetime.com.au;
+
+	# Added this for Lets Encrypt certificate renewal
+	# Refer discussion in ChatGPT for reasoning
+	location /.well-known/acme-challenge/ {
+		root /var/www/html;
+		allow all;
+	}
+
+	location / {
+		return 301 https://templetime.com.au;
+	}
+
+}
+
+
+# Case 3 - HTTPS redirect for templetime.com.au
+server {
+	listen 443 ssl;
+	server_name templetime.com.au;
+
+	ssl_certificate /etc/letsencrypt/live/templetime.com.au/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/templetime.com.au/privkey.pem;
+	include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+	# Ensure Nginx supports ECDSA
+	ssl_ecdh_curve prime256v1;
+
+	# Prefer stronger ciphers <-- This is included in the options-ssl-nginx.conf above
+	#ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:!aNULL:!eNULL:!LOW:!MEDIUM:!EXPORT:!DES:!3DES:!RC4:!MD5:!SHA1';
+
+
+	# Add CORS headers
+	add_header Access-Control-Allow-Origin "*";
+	add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+	add_header Access-Control-Allow-Headers "X-Requested-With, Content-Type, Authorization";
+
+	# Root dir - indicates root directory for entire server
+	root /var/www/templetime;
+	index index.html;
+
+	
+	# Main application traffic - API server. 
+	# NOTE: try_files only serves static files by default
+	location / {
+
+		root /var/www/templetime;
+		try_files $uri /index.html;
+
+		# Ensure browser does not cache .js files and fetches latest
+		add_header Cache-Control "no-cache, no-store, must-revalidate";
+		add_header Pragma "no-cache";
+		add_header Expires 0;
+
+	}
+
+
+	# For long-term caching, uncomment this block
+
+	# location /static/ {
+	# location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)${
+	#	root /var/www/templetime;
+	#	expires 30d;
+	#	add_header Cache-Control "public"; ## Or below combo
+	#	add_header Cache-Control "public, max-age=31536000";
+	#	try_files $uri =404;
+	#}
+
+	# Forward API calls for API traffic.
+	# Each name corresponds to the connector in Server side endpoints.dart
+
+	location /assets {
+		root /var/www/templetime/;
+		try_files $uri =404;
+	}
+
+	location /tmBooking {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /image {
+		proxy_pass http://localhost:8080/image;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /tmPandit {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /tmPuja {
+		proxy_pass http://127.0.0.0:8080/tmPuja;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /tmTemple {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /tmToken {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /tmDates {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+
+	location /serverpod_auth {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+		proxy_set_header X-Forwarded-Proto https;
+	}
+}
+
+
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+## -------------------------------------------------------
+##
+## Here we have the config for GLTILINGSYDNEY
+##
+## -------------------------------------------------------
+
+# Case 1, 4  - HTTP redirect for www.gltilingsydney.com.au, gltilingsydney.com.au to HTTPS
+server {
+	listen 80;
+	server_name gltilingsydney.com.au www.gltilingsydney.com.au;
+
+    # Run this for automatic config:
+    #   sudo certbot --nginx -d example.com
+    # Else:
+    #   sudo certbot certonly --webroot -w /var/www/html -d example.com
+    #
+    # ONLY NEEDED when Nginx DOES NOT automatically configure temporarily
+    # for domain verification.
+	# Added this for Lets Encrypt certificate renewal
+	# Refer discussion in ChatGPT for reasoning
+	#location /.well-known/acme-challenge/ {
+	#	root /var/www/html;
+	#	allow all;
+	#}
+
+    # Redirect all HTTP to HTTPS - path and other parts included
+	location / {
+	    return 301 https://$host$request_uri;
+	}
+}
+
+# Case 2, 3 - HTTPS redirect for gltilingsydney.com.au
+server {
+	listen 443 ssl;
+	server_name gltilingsydney.com.au www.gltilingsydney.com.au;
+
+    # SSL configurations
+	ssl_certificate /etc/letsencrypt/live/gltilingsydney.com.au/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/gltilingsydney.com.au/privkey.pem;
+	include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+	# Recommended, included: Ensure Nginx supports ECDSA
+	ssl_ecdh_curve prime256v1;
+
+	# Required if fetching fonts etc from other servers: Add CORS headers
+	add_header Access-Control-Allow-Origin "*";
+	add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+	add_header Access-Control-Allow-Headers "X-Requested-With, Content-Type, Authorization";
+
+	# Root dir - indicates root directory for entire server
+	# THIS IS WHERE index.html IS
+	root /var/www/gltilingsydney;
+	index index.html;
+
+
+	# NOTE: try_files only serves static files by default
+	location / {
+		try_files $uri $uri/ /index.html;
+	}
+
+    # Don’t cache index.html and core JS files - allows updates
+    location ~* \.(html|js|json|webmanifest)$ {
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+        add_header Pragma "no-cache";
+        add_header Expires 0;
+    }
+
+	# Static assets (like images or fonts) cache them, they have unique hashes in name
+    location /assets/ {
+        access_log off;
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+
+    # Gzip for performance
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_min_length 256;
+
+    # Optional: increase body size if uploading forms/media
+    client_max_body_size 5M;
+
+# -----------------------------------------------
+error_log /var/log/nginx/error.log notice;
