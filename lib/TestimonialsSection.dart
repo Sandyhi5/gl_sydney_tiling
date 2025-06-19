@@ -27,7 +27,6 @@ class TestimonialsSection extends StatelessWidget {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    final ScrollController shortController = ScrollController();
 
     return isMobile
     ? Container(
@@ -68,6 +67,12 @@ class TestimonialsSection extends StatelessWidget {
                           width: screenWidth - 10,
                           child: CarouselSlider(
                             items: reviews.entries.map((review) {
+                              //final ScrollController shortController = ScrollController();
+                              return ReviewCard(
+                                reviewer: review.key,
+                                text: review.value,
+                              );
+/*
                               return Container(
                                 width: screenWidth / 2 - 30,
                                 height: 250,
@@ -84,6 +89,7 @@ class TestimonialsSection extends StatelessWidget {
                                       interactive: true,
                                       controller: shortController,
                                       child: SingleChildScrollView(
+                                        controller: shortController,
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -96,6 +102,7 @@ class TestimonialsSection extends StatelessWidget {
                                     ),
                                   ),
                                 ),);
+*/
                             }).toList(),
                             options: CarouselOptions(
                               height: 250.0,
@@ -157,6 +164,11 @@ class TestimonialsSection extends StatelessWidget {
                           width: screenWidth - 10,
                           child: CarouselSlider(
                             items: reviews.entries.map((review) {
+                              return ReviewCard(
+                                reviewer: review.key,
+                                text: review.value,
+                              );
+/*
                               return Container(
                                 //width: screenWidth / 2 - 30,
                                 height: 220,
@@ -173,6 +185,7 @@ class TestimonialsSection extends StatelessWidget {
                                       interactive: true,
                                       controller: shortController,
                                       child: SingleChildScrollView(
+                                        controller: shortController,
                                         child: Column(
                                           children: [
                                             Padding(
@@ -190,6 +203,7 @@ class TestimonialsSection extends StatelessWidget {
                                     ),
                                   ),
                                 ),);
+*/
                             }).toList(),
                             options: CarouselOptions(
                               height: 240.0,
@@ -209,6 +223,68 @@ class TestimonialsSection extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class ReviewCard extends StatefulWidget {
+  final String reviewer;
+  final String text;
+
+  const ReviewCard({required this.reviewer, required this.text, super.key});
+
+  @override
+  State<ReviewCard> createState() => _ReviewCardState();
+}
+
+class _ReviewCardState extends State<ReviewCard> {
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      width: screenWidth / 2 - 30,
+      height: 250,
+      child: Card(
+        color: Colors.teal.shade300,
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Scrollbar(
+            controller: _controller,
+            thumbVisibility: true,
+            trackVisibility: true,
+            interactive: true,
+            child: SingleChildScrollView(
+              controller: _controller,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(widget.text, style: const TextStyle(fontSize: 15)),
+                  const SizedBox(height: 10),
+                  Text('- ${widget.reviewer}', style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+            ),
           ),
         ),
       ),

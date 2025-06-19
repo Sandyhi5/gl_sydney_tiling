@@ -51,44 +51,6 @@ class ContactSection extends StatelessWidget {
               ),
               SizedBox(height: 20,),
 
-/*
-              Row(
-                children: [
-                  // Leader box
-
-                  // Our Services
-*/
-/*
-                  SizedBox(width: screenWidth / 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Wrap(
-                          direction: Axis.vertical,
-                          children: [
-                            const Text(
-                              'Our Services',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 15,),
-                            Text('Floor Tiling\n\n'
-                                'Wall Tiling\n\n'
-                                'Bathroom\n\n'
-                                'Kitchen\n\n'
-                                'Laundry\n\n'
-                                'Patio & Pergola', style: TextStyle(color: Colors.white),),
-                          ]),
-                    ),
-                  ),
-*//*
-
-                ],
-              ),
-*/
-
               Row(
                 children: [
                   // Contact Info
@@ -107,11 +69,11 @@ class ContactSection extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 20,),
-                          Text('Email: gltiling@gmail.com\n\n'
-                            'Mobile: 0450 341 705\n\n'
-                            'Address: 1 Church St, Parramatta, NSW 2140\n\n'
-                            'ABN: 01 234 567 890\n\n'
-                            'Building License: 451582', style: TextStyle(color: Colors.white),),
+                          Text('Email: gltilingsydney@gmail.com\n\n'
+                              'Mobile: 0450 341 705\n\n'
+                              'Address: 76 Bay St, Croydon, NSW 2132\n\n'
+                              'ABN: 46 598 056 776\n\n'
+                              'Building License: 369036C', style: TextStyle(color: Colors.white),),
                         ]),
                     ),
                   ),
@@ -232,11 +194,11 @@ class ContactSection extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 15,),
-                        Text('Email: gltiling@gmail.com\n\n'
+                        Text('Email: gltilingsydney@gmail.com\n\n'
                             'Mobile: 0450 341 705\n\n'
-                            'Address: 1 Church St, Parramatta, NSW 2140\n\n'
-                            'ABN: 01 234 567 890\n\n'
-                            'Building License: 451582', style: TextStyle(color: Colors.white),),
+                            'Address: 76 Bay St, Croydon, NSW 2132\n\n'
+                            'ABN: 46 598 056 776\n\n'
+                            'Building License: 369036C', style: TextStyle(color: Colors.white),),
                       ]),
                 ),
               ),
