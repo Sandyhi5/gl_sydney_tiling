@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:emailjs/emailjs.dart' as emailjs;
 
